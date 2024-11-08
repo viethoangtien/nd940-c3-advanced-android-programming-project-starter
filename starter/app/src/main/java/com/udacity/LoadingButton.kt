@@ -116,7 +116,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     override fun performClick(): Boolean {
-        if (super.performClick()) return true
+        super.performClick()
         if (buttonState != ButtonState.Completed) return true
         buttonState = ButtonState.Clicked
         startAnimation()

@@ -8,4 +8,70 @@
     tools:context=".DetailActivity"
     tools:showIn="@layout/activity_detail">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_file_name_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_32dp"
+        android:text="@string/file_name"
+        android:textSize="@dimen/_18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_file_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/_18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_line"
+        app:layout_constraintTop_toTopOf="@id/text_file_name_title"
+        tools:text="Retrofit - Type-safe HTTP client for Android and Java by Square, Inc" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_status_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16dp"
+        android:text="@string/status"
+        android:textSize="@dimen/_18sp"
+        app:layout_constraintStart_toStartOf="@id/text_file_name_title"
+        app:layout_constraintTop_toBottomOf="@id/text_file_name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:textColor="@color/color_fail"
+        android:textSize="@dimen/_18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_line"
+        app:layout_constraintTop_toTopOf="@id/text_status_title"
+        tools:text="Fail" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_ok"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16dp"
+        android:layout_marginBottom="@dimen/_32dp"
+        android:background="@color/colorAccent"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,17 @@
 package com.udacity
 
 import android.app.DownloadManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import com.udacity.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,18 +19,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var downloadID: Long = 0
-
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
     private var downloadUrl: String = ""
+    private var fileNameToDownload: String = ""
+    private lateinit var notificationManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-
+        createNotificationChannel()
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         binding.layoutContent.customButton.setOnClickListener {
@@ -42,21 +40,54 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.layoutContent.groupDownload.setOnCheckedChangeListener { group, checkedId ->
-            downloadUrl = when (checkedId) {
-                R.id.radio_glide -> GLIDE_URL
-                R.id.radio_load_app -> UDACITY_URL
-                R.id.radio_retrofit -> RETROFIT_URL
-                else -> ""
+            when (checkedId) {
+                R.id.radio_glide -> {
+                    downloadUrl = GLIDE_URL
+                    fileNameToDownload = getString(R.string.download_first_item)
+                }
+
+                R.id.radio_load_app -> {
+                    downloadUrl = UDACITY_URL
+                    fileNameToDownload = getString(R.string.download_second_item)
+                }
+
+                R.id.radio_retrofit -> {
+                    downloadUrl = RETROFIT_URL
+                    fileNameToDownload = getString(R.string.download_third_item)
+                }
+
+                else -> {
+
+                }
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        notificationManager = getSystemService(NotificationManager::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(getString(R.string.notification_channel_id), name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system.
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            if (id == downloadID) {
-                Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
-            }
+            val isSuccess = id == downloadID
+            sendNotification(
+                context = this@MainActivity,
+                fileName = fileNameToDownload,
+                isSuccess = isSuccess
+            )
         }
     }
 
@@ -76,11 +107,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val GLIDE_URL =
-            "https://github.com/bumptech/glide/archive/refs/heads/master.zip"
+            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
         private const val UDACITY_URL =
-            "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
+            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
         private const val RETROFIT_URL =
-            "https://github.com/square/retrofit/archive/refs/heads/trunk.zip"
-        private const val CHANNEL_ID = "channelId"
+            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
     }
 }

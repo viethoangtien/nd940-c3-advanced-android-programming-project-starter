@@ -71,7 +71,9 @@ class MainActivity : AppCompatActivity() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(getString(R.string.notification_channel_id), name, importance).apply {
+            val channel = NotificationChannel(
+                getString(R.string.notification_channel_id), name, importance
+            ).apply {
                 description = descriptionText
             }
             // Register the channel with the system.
@@ -84,21 +86,16 @@ class MainActivity : AppCompatActivity() {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             val isSuccess = id == downloadID
             sendNotification(
-                context = this@MainActivity,
-                fileName = fileNameToDownload,
-                isSuccess = isSuccess
+                context = this@MainActivity, fileName = fileNameToDownload, isSuccess = isSuccess
             )
         }
     }
 
     private fun download() {
         val request =
-            DownloadManager.Request(Uri.parse(downloadUrl))
-                .setTitle(getString(R.string.app_name))
-                .setDescription(getString(R.string.app_description))
-                .setRequiresCharging(false)
-                .setAllowedOverMetered(true)
-                .setAllowedOverRoaming(true)
+            DownloadManager.Request(Uri.parse(downloadUrl)).setTitle(getString(R.string.app_name))
+                .setDescription(getString(R.string.app_description)).setRequiresCharging(false)
+                .setAllowedOverMetered(true).setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
@@ -107,10 +104,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val GLIDE_URL =
-            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
+            "https://github.com/bumptech/glide/archive/refs/heads/master.zip"
         private const val UDACITY_URL =
-            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
+            "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val RETROFIT_URL =
-            "https://filesampleshub.com/download/document/pdf/sample1.pdf"
+            "https://github.com/square/retrofit/archive/refs/heads/trunk.zip"
     }
 }

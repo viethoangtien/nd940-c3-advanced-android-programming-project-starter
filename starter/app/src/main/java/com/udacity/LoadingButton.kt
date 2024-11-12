@@ -124,9 +124,9 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun startAnimation() {
-        backgroundAnimator?.cancel()
         backgroundAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 2000 // Duration of the animation
+            repeatCount = ValueAnimator.INFINITE
             addUpdateListener { animation ->
                 widthFraction = animation.animatedValue as Float
                 if (widthFraction == 1f) {
@@ -137,15 +137,21 @@ class LoadingButton @JvmOverloads constructor(
             }
             start()
         }
-
-        circleAnimator?.cancel() // Cancel any ongoing animations
         circleAnimator = ValueAnimator.ofFloat(0f, 360f).apply {
             duration = 2000 // Animation duration in milliseconds
+            repeatCount = ValueAnimator.INFINITE
             addUpdateListener { animation ->
                 sweepAngle = animation.animatedValue as Float
                 invalidate() // Redraw the view
             }
             start()
         }
+    }
+
+    fun cancelAnimation() {
+        backgroundAnimator?.cancel()
+        circleAnimator?.cancel()
+        buttonState = ButtonState.Completed
+        invalidate()
     }
 }

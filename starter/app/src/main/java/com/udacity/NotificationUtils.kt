@@ -22,13 +22,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.Manifest
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 // Notification ID.
 private const val NOTIFICATION_ID = 0
+private const val ACTION_REQUEST_CODE = 1998
 
 fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
     val contentIntent = Intent(context, DetailActivity::class.java).apply {
@@ -41,6 +41,19 @@ fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
         contentIntent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
+    val actionIntent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
+        action = NotificationBroadcastReceiver.ACTION_STATUS
+        putExtra(DetailActivity.EXTRA_FILE_NAME, fileName)
+        putExtra(DetailActivity.EXTRA_STATUS, isSuccess)
+    }
+    val actionPendingIntent: PendingIntent =
+        PendingIntent.getBroadcast(
+            context,
+            ACTION_REQUEST_CODE,
+            actionIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
     val title = context.getString(R.string.notification_title)
     val description = context.getString(R.string.notification_description)
 
@@ -54,6 +67,11 @@ fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .addAction(
+            R.drawable.ic_launcher_foreground, context.getString(R.string.check_the_status),
+            actionPendingIntent
+        )
+
 
     with(NotificationManagerCompat.from(context)) {
         if (ActivityCompat.checkSelfPermission(
@@ -61,7 +79,6 @@ fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(context, "checkSelfPermission", Toast.LENGTH_SHORT).show()
             return@with
         }
         // notificationId is a unique int for each notification that you must define.

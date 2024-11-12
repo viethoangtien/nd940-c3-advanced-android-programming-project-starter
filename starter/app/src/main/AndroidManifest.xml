@@ -28,5 +28,12 @@
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".NotificationBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="ACTION_STATUS" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

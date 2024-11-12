@@ -24,4 +24,5 @@
     <string name="ok">ok</string>
     <string name="success">Success</string>
     <string name="fail">Fail</string>
+    <string name="check_the_status">Check the status</string>
 </resources>

@@ -28,7 +28,7 @@ import androidx.core.app.NotificationManagerCompat
 
 // Notification ID.
 private const val NOTIFICATION_ID = 0
-private const val ACTION_REQUEST_CODE = 1998
+const val ACTION_REQUEST_CODE = 1998
 
 fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
     val contentIntent = Intent(context, DetailActivity::class.java).apply {
@@ -42,9 +42,9 @@ fun sendNotification(context: Context, fileName: String, isSuccess: Boolean) {
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     val actionIntent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
+        putExtra(NotificationBroadcastReceiver.EXTRA_FILE_NAME, fileName)
+        putExtra(NotificationBroadcastReceiver.EXTRA_STATUS, isSuccess)
         action = NotificationBroadcastReceiver.ACTION_STATUS
-        putExtra(DetailActivity.EXTRA_FILE_NAME, fileName)
-        putExtra(DetailActivity.EXTRA_STATUS, isSuccess)
     }
     val actionPendingIntent: PendingIntent =
         PendingIntent.getBroadcast(
